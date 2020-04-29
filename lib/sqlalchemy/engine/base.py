@@ -387,9 +387,7 @@ class Connection(Connectable):
             return self.__branch_from._revalidate_connection()
         if self.__can_reconnect and self.__invalid:
             if self.__transaction is not None:
-                raise exc.InvalidRequestError(
-                    "Can't reconnect until invalid "
-                    "transaction is rolled back")
+                self.__transaction.rollback()
             self.__connection = self.engine.raw_connection(_connection=self)
             self.__invalid = False
             return self.__connection
